@@ -24,7 +24,7 @@ This solution requires the following to build & run:
     - Nodejs
 
 ### What is being achieved in this POC
-'''
+
 	- Used Python3.6 and Flask Web framework to quickly design the API's.
 	- Used Servereless as the infrastructure. Implemented Serverlless.com to resolve dependency, build , package and deploy the API both locally and in Cloud. This enables developers to spend less time in CICD configuration and deploy continuously.
 	- Used serverless-wsgi to serve the API locally for developer validation. Ref: https://github.com/logandk/serverless-wsgi
@@ -33,9 +33,9 @@ This solution requires the following to build & run:
 	- Infrastructure code is designed in a "config driven" way so that multiple zone, environment can be supported without much rework.  Used separate set of properties for different AWS account (account_properties.yml) and different application runtime environment (properties/env-dev.yml)
 	- Added a Test framework to the code which implements part of the coverage. 
 	- Added Unit Test to a few methods using pytest. But the framework can be used to complete test cases for better coverage.
-'''
+
 ### Things required to productionize the solution
-'''
+
 	- Store App secret in KMS/Vault/SSM or other custom secret manager. Assign Lambda an IAM role on the secret object and derive the values on runtime, without storing them on the instance of lambda. Securing app secret should be the first consideration to me when it comes to deploying to Production environment.
 	- Proper Error Handling and Logging should be added before deploying this solution in Prod. Although I added some basic error handling, it should be enhanced to handle all scenarios and produce meaningful message for enduser/javascript UI app to decode.
 	- Adding API Gateway to expose the API in lambda. For local run I used "sls wsgi serve" cli exposed by the plugin to test the functionality. In Prod we need to add an API Gateway with proper trusted SSL added to it. Also the API Gateway endpoint should be added to a DNS Domain  Record set as per what was registered in the SSL Cert. This way we can secure communication to this lambda.
@@ -44,7 +44,7 @@ This solution requires the following to build & run:
 	- Complete the CICD code, achieve handsfree promotion of artifact into stages and deploy them continuously. I though added a Jenkinsfile, any tooling can be used to call the scripts that orchestrate the deployment.
 	- Improving the framework built in lib usage in the API. Flask comes with many built-in utilities, I tried to add few like "Error-Handling" there are more that can be leveraged to cleanup the code and make it native to the Flask ecosystem
     Multi-Zone deployment and network load balancing should be accounted for when it comes to productionize the app. What happens if the availability-zone where the lambdas are deployed renders unavailable. How the incoming requests are routed to another zone should be implemented using Route53 or similar in GCP or Azure
-'''
+
 ### Building & Local Testing
 Clone the repo down & do the following to build the code:
 
