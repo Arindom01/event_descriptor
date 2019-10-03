@@ -1,0 +1,82 @@
+service: event-descriptor
+
+frameworkVersion: "1.53.0"
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+
+package:
+  exclude:
+    - venv/**
+    - node_modules/**
+    - .git/**
+    - .coverage/**
+  individually: true
+
+provider:
+  name: aws
+  runtime: python3.7
+  region: us-west-2
+  tracing: true
+  versionFunctions: false
+  environment:
+    stack_name: ${opt:stage}
+    region_name: ${self:provider.region}
+  role: eventdescriptorrole
+
+custom:
+  buildProperties: ${file(account_properties.yml):${opt:account}}
+  host:  ${self:custom.buildProperties.host, opt:stage}
+  # pythonRequirements:
+  pythonBin: /usr/bin/python3
+  stageVariables:
+    env: ${self:provider.stage}
+  deployment:
+    artifactVersion: '1.0'
+    artifactGroupID: 'com.xxx.eventdesc'
+    artifactsZip: 'eventdescpoc'
+    include: 'serverless.yml package.json account_properties.yml properties/* datastore/* config/*'
+  wsgi:
+    app: src/api.app
+    packRequirements: false
+    pythonBin: python3
+# -----------------------------------------------------
+# Lambdas
+# -----------------------------------------------------
+functions:
+  eventapi:
+    handler: wsgi_handler.handler
+    events:
+      - http: ANY /
+      - http: ANY {proxy+}
+
+
+# -----------------------------------------------------
+# CFT Resources
+# -----------------------------------------------------
+resources:
+  Resources:
+
+    # Lambda Role
+    eventdescriptorrole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /role/
+        RoleName: eventdesc-lambda-role-${opt:stage}
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/AWSLambdaFullAccess
+          - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+          - arn:aws:iam::aws:policy/AmazonSESFullAccess
+          - arn:aws:iam::aws:policy/AmazonSESFullAccess
+          - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
+          - arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole

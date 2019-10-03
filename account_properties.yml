@@ -1,0 +1,12 @@
+#
+# dev account
+#
+100000000000:
+  domain: test.eventdesc.com
+
+
+#
+# Prod account
+#
+200000000000:
+  domain: prod.eventdesc.com

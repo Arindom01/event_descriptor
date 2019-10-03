@@ -1,0 +1,9 @@
+non-prod:
+      db_relative_path: "datastore/deploys.sqlite"
+      q_bydate: "SELECT datetime(date, 'unixepoch') as fmdate, id, sha, action, engineer FROM deploys where fmdate between  '{fromDate}' and '{toDate}' "
+      q_byeng: "SELECT datetime(date, 'unixepoch') as fmdate, id, sha, action, engineer FROM deploys where engineer = '{engineer}' "
+      q_listalleng: "SELECT distinct(engineer) FROM deploys"
+      q_sumary_daily: "Select f.fmdate, (f.PrevDayStaging - f.staging) stagingActivityIncrease, f.staging, (f.PrevDayDeployed - f.deployed) deployActivityIncrease,  f.deployed from (
+SELECt  tm.fmdate, LAG( sum(case when tm.action = 'stage' then tm.ct end) ,1,0) OVER ( ORDER BY tm.fmdate ) PrevDayStaging, sum(case when tm.action = 'stage' then tm.ct end) staging, LAG( sum(case when tm.action = 'deploy' then tm.ct end) ,1,0) OVER ( ORDER BY tm.fmdate ) PrevDayDeployed, sum(case when tm.action = 'deploy' then tm.ct end) deployed from 
+(SELECT tmp.fmdate,  tmp.action,  count(*) ct from (SELECT date(date, 'unixepoch') as fmdate, id, sha, action, engineer FROM deploys) as tmp
+group by tmp.fmdate,  tmp.action) tm group by tm.fmdate Order by fmdate DESC) f "
