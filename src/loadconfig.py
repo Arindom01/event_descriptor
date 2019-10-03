@@ -18,7 +18,6 @@ class App_Conf:
 
 
     proj_dir_path = os.path.dirname(os.path.realpath(__file__))
-    # print(locale_dir = os.path.abspath(os.path.join(root_path)))
     _conf = anyconfig.load(os.path.join(Path(__file__).parent.parent , "src/config/config.yml"))
         
     @staticmethod

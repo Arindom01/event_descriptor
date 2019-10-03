@@ -20,8 +20,6 @@ class dbutil:
             conn = sqlite3.connect(db_file)
             conn.row_factory = self.dict_factory
         except Error as e:
-            # print(e)
-            logging.error("-----------------")
             logging.error(str(e))
     
         return conn
@@ -39,7 +37,6 @@ class dbutil:
         Query all rows in the tasks table
         """
         cur = conn.cursor()
-        # logging.info(cmd)
 
         cur.execute(cmd)
         # cur.execute("PRAGMA table_info(deploys)")
