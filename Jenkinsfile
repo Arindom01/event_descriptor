@@ -7,7 +7,7 @@ node('serverless') {
 
         stage('Unit Test') {
             sh "#!/bin/bash \n" + 
-                "virtualenv -p python3.7 venv \n" + 
+                "virtualenv -p python3 venv \n" + 
                 "source venv/bin/activate \n" +
                 "pip3 install -r requirements.txt --target ./packages \n" + 
                 "pytest --capture=sys"
@@ -18,7 +18,7 @@ node('serverless') {
         stage('Build') {
             echo 'Building..'
             sh "#!/bin/bash \n" + 
-                "virtualenv -p python3.7 venv \n" + 
+                "virtualenv -p python3 venv \n" + 
                 "source venv/bin/activate \n" +
                 "pip3 install -r requirements.txt --target ./packages \n"
 
