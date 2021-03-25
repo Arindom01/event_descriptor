@@ -50,7 +50,7 @@ python-box==3.4.5
 python-dateutil==2.7.3
 python-jose==3.0.1
 pytz==2019.2
-PyYAML==5.1.2
+PyYAML==5.4
 requests==2.21.0
 responses==0.10.6
 rsa==4.0
